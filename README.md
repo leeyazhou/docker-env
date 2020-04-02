@@ -8,6 +8,8 @@ build test environment, like mysql, redis,zookeeper and so on.
 
 ### 启动容器
 
+启动容器有两种方式：交互模式和后台进程模式。
+
 - 交互模式
 
 ```shell
