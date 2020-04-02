@@ -45,9 +45,9 @@ services:
         image: mysql:5.7.29
         container_name: mysql5.7
         command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;' --innodb-flush-log-at-trx-commit=0
-        volumes: 
+        volumes:
             - ./data:/var/lib/mysql
-        environment: 
+        environment:
             MYSQL_ROOT_PASSWORD: root
         ports:
         - "3306:3306"
