@@ -1,0 +1,7 @@
+version: '3.1'
+services:
+    mysql:
+        image: centos:centos7
+        container_name: centos7
+        command: tail -f /dev/null
+        
