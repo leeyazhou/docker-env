@@ -28,10 +28,33 @@ docker-compose down
 
 ### 进入容器
 
-一般来说，在每个环境的docker-compose.yml里设置了container_name，而这个container_name属性是我们需要的。
+一般来说，在每个环境的docker-compose.yml里设置了container_name，而这个container_name属性的值是我们需要的。
 
 ```shell
 docker exec -ti container_name /bin/bash
+```
+
+对于MySQL来说，docker-compose.yml设置如下：
+
+```yml
+version: '3.1'
+services:
+    mysql:
+        image: mysql:5.7.29
+        container_name: mysql5.7
+        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;' --innodb-flush-log-at-trx-commit=0
+        volumes: 
+            - ./data:/var/lib/mysql
+        environment: 
+            MYSQL_ROOT_PASSWORD: root
+        ports:
+        - "3306:3306"
+```
+
+那么对应的进入容器内部的方式如下
+
+```shell
+docker exec -ti mysql5.7 /bin/bash
 ```
 
 ## MySQL
