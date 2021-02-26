@@ -1,0 +1,14 @@
+version: '3.1'
+services:
+    mongodb:
+        image: mongo:4.4.4-bionic
+        restart: always
+        container_name: mongo-4-4-4
+        volumes: 
+            - ./data:/data/db
+        environment: 
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
+        ports:
+            - "3306:3306"
+  
