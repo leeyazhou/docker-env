@@ -1,0 +1,10 @@
+version: '3.1'
+services:
+    redis:
+        image: redis:5
+        container_name: redis-5
+        command: redis-server /data/redis.conf
+        volumes: 
+            - ./data:/data
+        ports:
+            - "6399:6399"
