@@ -1,24 +1,45 @@
-version: '3.1'
- 
+version: '2.2'
 services:
-  elasticsearch:
-    image: elasticsearch:7.17.6
-    container_name: elasticsearch
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    networks:
-      - somenetwork
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.16
+    container_name: es01
     environment:
+      - node.name=elasticsearch
+      - cluster.name=elasticsearch
+      - bootstrap.memory_lock=true
       - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms1000m -Xmx2000m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - elastic
   kibana:
-    image: kibana:7.17.6
-    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.17.6
+    container_name: kibana01
     ports:
       - 5601:5601
+    environment:
+      SERVER_NAME: kibana01
+      ELASTICSEARCH_HOSTS: '["http://es01:9200"]'
+    volumes:
+      - ./kibana/data:/usr/share/kibana/data
+      - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
     networks:
-      - somenetwork
+      - elastic
+      
+volumes:
+  data01:
+    driver: local
 
 networks:
-  somenetwork:
+  elastic:
     driver: bridge
