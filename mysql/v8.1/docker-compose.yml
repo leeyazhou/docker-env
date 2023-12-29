@@ -1,13 +1,14 @@
 version: '3.1'
 services:
     mysql:
-        image: arm64v8/mysql:5.7.29
-        container_name: mysql5.7
+        image: arm64v8/mysql:8.1.0
+        container_name: mysql-v81
         command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;' --innodb-flush-log-at-trx-commit=0
         volumes:
-            - ./data:/var/lib/mysql
+            - ~/mysql/v81/data:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: root
+            TZ: Asia/Shanghai
         ports:
             - "3306:3306"
     # adminer:

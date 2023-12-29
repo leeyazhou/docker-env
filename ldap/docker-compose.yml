@@ -1,0 +1,23 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+version: "3"
+
+services:
+  openldap:
+    image: docker.io/bitnami/openldap:2.6.5
+    container_name: openldap_2.6.5
+    ports:
+      - "1389:1389"
+      - "1636:1636"
+    environment:
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=0penldap12345
+      - LDAP_USERS=yazhou2.li,user02
+      - LDAP_PASSWORDS=0penldap12345,0penldap12345
+    volumes:
+      - "./openldap_data:/bitnami/openldap"
+
+volumes:
+  openldap_data:
+    driver: local

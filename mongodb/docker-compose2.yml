@@ -6,6 +6,9 @@ services:
         container_name: mongo-4-4-4
         volumes: 
             - ./data:/data/db
+        environment: 
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: root
         ports:
             - "27017:27017"
   

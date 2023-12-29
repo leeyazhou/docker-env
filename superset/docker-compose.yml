@@ -1,0 +1,24 @@
+version: '3.1'
+
+services:
+    redis:
+        image: redis:6.2
+        container_name: redis-6-forsuperset
+        command: redis-server /data/redis.conf
+        volumes: 
+            - ./data:/data
+        ports:
+            - "6399:6399"
+    superset:
+        image: bytesgo/superset3
+        container_name: superset3
+        links:
+          - "clickhouse-server:clickhouse-server"
+        ports:
+          - "8088:8088"
+    clickhouse-server:
+        image: bytesgo/clickhouse-server
+        container_name: clickhouse-server-forsuperset
+        ports:
+          - "9000:9000"
+          - "8123:8123"
