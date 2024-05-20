@@ -1,0 +1,64 @@
+version: '3.1'
+
+services:
+    rocketmqNameSrv:
+        image: apache/rocketmq:4.9.5
+        container_name: rocketmq-namesrv-4
+        command: sh mqnamesrv
+        volumes: 
+            - ./data/namesrv/logs:/root/logs
+            - ./data/namesrv/store:/root/store
+        ports:
+            - "9876:9876"
+        networks:
+            - rocketmq
+    rocketmqBroker:
+        image: apache/rocketmq:4.9.5
+        container_name: rocketmq-broker-4
+        command: sh mqbroker -c ../conf/broker.conf
+        environment:
+            TZ: Asia/Shanghai
+            NAMESRV_ADDR: "rocketmqNameSrv:9876"
+            JAVA_OPTS: "-Duser.home=/opt"
+            JAVA_OPT_EXT: "-server -Xms128m -Xmx256m" 
+        volumes: 
+            - ./data/broker/logs:/root/logs
+            - ./data/broker/store:/root/store
+        ports:
+            - "10911:10911"
+            - "10909:10909"
+        links:
+          - "rocketmqNameSrv:rocketmqNameSrv"
+        networks:
+            - rocketmq
+    rocketmqDashboard:
+        image: apacherocketmq/rocketmq-dashboard:latest
+        container_name: rocketmq-dashboard
+        environment:
+            - JAVA_OPTS=-Drocketmq.namesrv.addr=10.100.216.147:9876
+        links:
+          - "rocketmqNameSrv:rocketmqNameSrv"
+        ports:
+            - "8080:8080"
+        networks:
+            - rocketmq
+    # eventmesh:
+    #     image: apache/eventmesh:v1.10.0
+    #     container_name: eventmesh
+    #     volumes: 
+    #         - ./data/eventmesh/logs/:/data/app/eventmesh/logs
+    #         - ./data/eventmesh/conf/eventmesh.properties:/data/app/eventmesh/conf/eventmesh.properties 
+    #         - ./data/eventmesh/conf/rocketmq-client.properties:/data/app/eventmesh/conf/rocketmq-client.properties
+    #     ports:
+    #         - "10000:10000"
+    #         - "10105:10105"
+    #         - "10205:10205"
+    #         - "10106:10106"
+    #     links:
+    #       - "rocketmqBroker:rocketmqBroker"
+    #       - "rocketmqNameSrv:rocketmqNameSrv"
+    #     networks:
+    #         - rocketmq
+networks:
+  rocketmq:
+    driver: bridge
